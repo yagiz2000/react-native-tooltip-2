@@ -1,5 +1,6 @@
-import { StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { Platform, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Placement, PlacementStyle } from "./Tooltip.type";
+import { getAndroidStatusBarHeight } from "./helpers";
 
 const styles = StyleSheet.create({
   container: {
@@ -185,8 +186,11 @@ const styleGenerator = (styleGeneratorProps: any) => {
         adjustedContentSize.width !== 0 &&
           measurementsFinished &&
           styles.containerVisible,
-        topAdjustment !== 0 && {
-          top: topAdjustment,
+        {
+          top:
+            Platform.OS === "android"
+              ? (topAdjustment || 0) - getAndroidStatusBarHeight()
+              : topAdjustment || 0,
         },
       ),
     ],
